@@ -1,4 +1,6 @@
+//**********************************************************************
 //KEWORD 'THIS' AND USING IT WITH APPLY, CALL AND BIND
+//**********************************************************************
 
 
 var janekObj = {
@@ -16,9 +18,6 @@ var janekObj = {
 var anetaObj = {
 	firstName: "Aneta"
 }
-
-
-
 
 //JUST CALLING FUNCTION FROM AN OBJECT PROPERTY. THIS KEYWORD IS CORRECTLY ASSIGNED TO THE OBJECT
 janekObj.addNumbers(1,2,3,4);
@@ -47,8 +46,10 @@ anetaCalc(3,4);
 //Aneta, 10
 
 
-
+//**********************************************************************
 //'NEW' KEYWORD WITH 'THIS' KEYWORD USED IN CONSTRUCTOR FUNCTION (MIMIC CLASS IN JS)
+//**********************************************************************
+
 
 //CONSTRUCTOR FUNCTION
 function Dog(name, age){
@@ -71,10 +72,16 @@ var maniek 	= new Dog ('Maniek', 10);
 //CALLING FUNCIONS
 
 maniek.bark();
+//maniek barked
+
 rusty.bark();
+//rusty barked
 
 
+//**********************************************************************
 //MORE ON CONSTRUCTOR FUNCTIONS
+//**********************************************************************
+
 
 //CAR CONSTRUCTOR FUNCTION
 function Car(make, model, year){
@@ -83,7 +90,6 @@ function Car(make, model, year){
 	this.year=year;
 	this.wheels=4;
 }
-
 
 //ANOTHER CONSTRUCTOR FUNCTION WICH CAN SHARE CODE (PROPERTIES) WITH THE HELP OF ASSINGING 'THIS' KEYWORD TO OBJECT
 //CREATED BY THE FUNCTION USING CALL METHOD
@@ -115,14 +121,17 @@ console.log(Object.entries(car1));
 console.log(Object.entries(moto1));
 
 
+//**********************************************************************
 //PROTOTYPE CHAINS, __PROTO__, PROTOTYPE AND CONSTRUCTOR OBJECT PROPERTIES
 //CREATINF TWO OBJECTS BY CALLING A CONSTRUCTOR FUNCTION
+//**********************************************************************
+
+
 function Person(name){
 	this.name=name;
 }
 var bob = new Person('Bob');
 var red = new Person('Red');
-
 
 //ADDING A PROPERTY TO THE CONTRUCTOR PROTOTYPE VIA __PROTO__
 Person.prototype.isVeteran = true;
@@ -139,9 +148,13 @@ console.dir(bob);
 Person.prototype === bob.__proto_
 //true
 
+
+//**********************************************************************
 //REFACTORING WITH USE OF PROTOTYPE CHAINING
 //INSTEAD OF CALLING A FINCTION EACH TIME WHEN CREATNG AN OBJECT IT IS MORE EFFICIENT TO MAKE ACCESSIBLE OBJECT PROPERTIES
 //AND CALL THEM WHEN NEEDED
+//**********************************************************************
+
 
 //INEFFICIENT WAY
 
@@ -181,8 +194,10 @@ uta.sayHi();
 ula.sayHi();
 
 
+//**********************************************************************
+//ANOTHER EXAMPLE (EXCERCISE)
+//**********************************************************************
 
-//ANOTHER SET
 
 function Vehicle(make, model, year){
 	this.make=make;
@@ -202,7 +217,7 @@ Vehicle.prototype.turnOff=function(){
 }
 
 Vehicle.prototype.honk=function(){
-	if (this.isRunning===true){
+	if (this.isRunning){
 		console.log('BEEP! BEEP!');
 	}else{
 		console.log(this.model + " is not running");
@@ -225,3 +240,89 @@ corsa.honk();
 corsa.turnOff();
 corsa.honk();
 //not running
+
+
+//**********************************************************************
+//CLOUSURES EXAPMLE
+//**********************************************************************
+
+
+//A CLOUSURE (INNER) CAN USE OUTER FUNCTION'S VARIABLE
+//IT IS USEFUL TO MIMIC PRIVATE CLASS VARIABLES
+
+function outer(){
+	var data = 'clousers are '
+	return function inner(){
+		var innerData = 'awesome'
+		return data + innerData;
+	}
+}
+
+//CALLING OUTER FUNCTION WILL RETURN INNER FUNCTION CODE AS EXPECTED
+console.log(outer());
+//inner function
+
+//SO CALLIN IT LIKE THAT WILL CALL INNER FUNTION WICH CAN USE VARIABLE DEFINED IN OUTER FUNCTION WICH HAS ALREADY RETURNED
+console.log(outer()());
+//clousers are awesome
+
+
+//**********************************************************************
+//COUSERES AS PRIVATE VARIABLE
+//**********************************************************************
+
+
+function count(){
+	var counter = 0;
+	return function(){
+		return ++counter;
+	}
+}
+
+//THOE TWO WILL BE INDEPENDANT
+var c = count();
+var c2 = count();
+
+console.log(c());
+//1
+console.log(c());
+//2
+console.log(c());
+//3
+console.log(c2())
+//1
+
+//THE COUNTER VARIABLE IS INNACCESSIBLE OUTSIDE FUNCTION(PRIVATE)
+//console.log(counter);
+//reference error
+
+
+//**********************************************************************
+//EXAPMLE OF CONSTRUCTOR FUNCTION USING CLOSURES
+//**********************************************************************
+
+
+function ClassRoom(){
+	var instructors = ['Hobo', 'Hillbilly']
+	return {
+		getInstructors: function(){
+			return instructors;
+		},
+		addInstructors: function(instructor){
+			instructors.push(instructor);
+			return instructors;
+		}
+	}
+}
+
+var classroom1 = new ClassRoom();
+var classroom2 = new ClassRoom();
+
+console.log(classroom1.getInstructors());
+//'Hobo', 'Hillbilly'
+
+console.log(classroom1.addInstructors('Patty'));
+//'Hobo', 'Hillbilly', 'Patty'
+
+console.log(classroom2.getInstructors());
+//'Hobo', 'Hillbilly'
